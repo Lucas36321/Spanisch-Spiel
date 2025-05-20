@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>¡Rápido, dilo!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Rubik', sans-serif;
+      background-image: url("hintergrund.jpg");
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      text-align: center;
+      min-height: 100vh;
+      backdrop-filter: brightness(0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      color: #fff700;
+      text-shadow: 2px 2px 4px #000;
+    }
+
+    p {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+
+    button {
+      background-color: #ffcc00;
+      color: #aa151b;
+      font-size: 1.5em;
+      font-weight: bold;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #status {
+      font-size: 2em;
+      margin-top: 30px;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-shadow: 1px 1px 3px #000;
+    }
+  </style>
+</head>
+<body>
+  <h1>¡Rápido, dilo!</h1>
+  <button onclick="iniciarJuego()">¡Empezar!</button>
+  <div id="status">Listo...</div>
+
+  <!-- Audios -->
+  <audio id="tick" src="tick.mp3" preload="auto"></audio>
+  <audio id="alarm" src="alarm.mp3" preload="auto"></audio>
+  <audio id="music" src="musik.mp3" preload="auto" loop></audio>
+
+  <script>
+    let intervalo;
+    let contador = 0;
+    let detenerEn = 0;
+    let musica = document.getElementById('music');
+    let alarm = document.getElementById('alarm');
+
+    function iniciarJuego() {
+      contador = 0;
+      detenerEn = Math.floor(Math.random() * 16) + 15;
+      document.getElementById('status').innerText = 'Esperando...';
+      clearInterval(intervalo);
+
+      if (musica.paused) {
+        musica.volume = 0.1; // Musik sehr leise
+        musica.play();
+      }
+
+      alarm.volume = 1.0; // Alarm maximale Lautstärke
+
+      intervalo = setInterval(() => {
+        contador++;
+        document.getElementById('tick').play();
+        document.getElementById('status').innerText = ` ${contador}`;
+
+        if (contador >= detenerEn) {
+          clearInterval(intervalo);
+          alarm.play();
+          document.getElementById('status').innerText = '¡El tiempo ha terminado!';
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
